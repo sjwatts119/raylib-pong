@@ -10,6 +10,7 @@ private:
     Vector2 position;
     Color color;
     int radius;
+    int speed = 5;
     Vector2 movement = {0, 0};
 
 public:
@@ -30,6 +31,10 @@ public:
     void setRadius(int radius);
 
     int getRadius();
+
+    void setSpeed(int speed);
+
+    int getSpeed();
 
     std::optional<Side> getCollisionSide(const Rectangle &rectangle);
 

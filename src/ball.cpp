@@ -48,6 +48,16 @@ int Ball::getRadius()
     return radius;
 }
 
+void Ball::setSpeed(int speed)
+{
+    this->speed = speed;
+}
+
+int Ball::getSpeed()
+{
+    return speed;
+}
+
 // Check if the ball collides with a rectangle and return the side of collision if it does.
 std::optional<Side> Ball::getCollisionSide(const Rectangle &rectangle)
 {
@@ -99,8 +109,8 @@ void Ball::deflect(Side side)
 
 void Ball::move()
 {
-    position.x += movement.x;
-    position.y += movement.y;
+    position.x += movement.x * speed;
+    position.y += movement.y * speed;
 }
 
 void Ball::update()
