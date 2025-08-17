@@ -29,7 +29,9 @@ add_executable(${PROJECT_NAME} ${SOURCES}
         includes/ball.h
         includes/side.h
         includes/barrier.h
-        src/barrier.cpp)
+        src/barrier.cpp
+        includes/paddle.h
+        src/paddle.cpp)
 target_link_libraries(${PROJECT_NAME} raylib)
 
 if (APPLE AND NOT CMAKE_SYSTEM STRLESS "Darwin-18.0.0")

@@ -4,6 +4,7 @@
 Ball::Ball(Vector2 position, Color color, int radius)
     : position(position), color(color), radius(radius)
 {
+    // Set a random initial movement direction
     movement.x = GetRandomValue(0, 1) == 0 ? -1 : 1;
     movement.y = GetRandomValue(1, 1) == 0 ? -1 : 1;
 }
@@ -69,7 +70,7 @@ std::optional<Side> Ball::getCollisionSide(const Rectangle &rectangle)
 }
 
 // Get the closest side of the rectangle to the ball's position.
-Side Ball::getClosestSideToCollision(const Rectangle &rectangle)
+Side Ball::getClosestSideToCollision(const Rectangle &rectangle) const
 {
     float distanceToLeft = position.x - rectangle.x;
     float distanceToRight = (rectangle.x + rectangle.width) - position.x;
@@ -89,7 +90,7 @@ Side Ball::getClosestSideToCollision(const Rectangle &rectangle)
     }
 }
 
-void Ball::deflect(Side side)
+void Ball::deflect(const Side side)
 {
     switch (side) {
         case Side::RIGHT:

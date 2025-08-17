@@ -18,6 +18,7 @@ int main()
         ClearBackground(BLACK);
 
         Board.draw();
+
         EndDrawing();
     }
 

@@ -14,7 +14,7 @@ private:
     Color color = WHITE;
 
     Ball ball;
-    std::vector<Barrier> barriers;
+    std::vector<std::unique_ptr<Barrier>> barriers;
 
 public:
     explicit Board(Vector2 dimensions, Vector2 position, Color color = WHITE);
@@ -32,6 +32,8 @@ public:
     Color getColor();
 
     Rectangle getRectangle();
+
+    void applyBallDeflections();
 
     void draw();
 };

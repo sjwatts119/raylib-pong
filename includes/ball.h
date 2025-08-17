@@ -38,7 +38,7 @@ public:
 
     std::optional<Side> getCollisionSide(const Rectangle &rectangle);
 
-    Side getClosestSideToCollision(const Rectangle &rectangle);
+    Side getClosestSideToCollision(const Rectangle &rectangle) const;
 
     void deflect(Side side);
 

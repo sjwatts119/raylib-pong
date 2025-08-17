@@ -5,7 +5,7 @@
 
 class Barrier
 {
-private:
+protected:
     Vector2 dimensions;
     Vector2 position;
     Color color = WHITE;
@@ -27,7 +27,7 @@ public:
 
     Rectangle getRectangle();
 
-    void draw();
+    virtual void draw();
 };
 
 
