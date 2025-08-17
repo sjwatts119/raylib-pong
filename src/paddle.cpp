@@ -1,6 +1,6 @@
 #include "paddle.h"
 
-Paddle::Paddle(Vector2 dimensions, Vector2 position, Rectangle playArea, Color color)
+Paddle::Paddle(const Vector2 dimensions, const Vector2 position, const Rectangle playArea, const Color color)
     : Barrier(dimensions, position, color),
       playArea(playArea)
 {
@@ -27,11 +27,11 @@ void Paddle::moveDown()
 void Paddle::applyMovement()
 {
     if (IsKeyDown(KEY_UP)) {
-        Paddle::moveUp();
+        moveUp();
     }
 
     if (IsKeyDown(KEY_DOWN)) {
-        Paddle::moveDown();
+        moveDown();
     }
 }
 
@@ -42,7 +42,7 @@ void Paddle::update()
 
 void Paddle::draw()
 {
-    Paddle::update();
+    update();
 
     DrawRectangleRec(getRectangle(), RED);
 }

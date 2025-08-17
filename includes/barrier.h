@@ -13,22 +13,23 @@ protected:
 public:
     explicit Barrier(Vector2 dimensions, Vector2 position, Color color = SKYBLUE);
 
-    void setDimensions(Vector2 dimensions);
+    virtual ~Barrier() = default;
 
-    Vector2 getDimensions();
+    void setDimensions(Vector2 newDimensions);
 
-    void setPosition(Vector2 position);
+    [[nodiscard]] Vector2 getDimensions() const;
 
-    Vector2 getPosition();
+    void setPosition(Vector2 newPosition);
 
-    void setColor(Color color);
+    [[nodiscard]] Vector2 getPosition() const;
 
-    Color getColor();
+    void setColor(Color newColor);
 
-    Rectangle getRectangle();
+    [[nodiscard]] Color getColor() const;
+
+    [[nodiscard]] Rectangle getRectangle() const;
 
     virtual void draw();
 };
-
 
 #endif //RAYLIBPONG_BARRIER_H

@@ -2,52 +2,52 @@
 #include "raylib.h"
 #include "side.h"
 
-Scoreboard::Scoreboard(Vector2 position, Vector2 dimensions, Color color)
+Scoreboard::Scoreboard(const Vector2 position, const Vector2 dimensions, const Color color)
     : position(position), dimensions(dimensions), color(color)
 {
 }
 
-void Scoreboard::setPosition(Vector2 position)
+void Scoreboard::setPosition(const Vector2 newPosition)
 {
-    this->position = position;
+    this->position = newPosition;
 }
 
-Vector2 Scoreboard::getPosition()
+Vector2 Scoreboard::getPosition() const
 {
     return position;
 }
 
-void Scoreboard::setDimensions(Vector2 dimensions)
+void Scoreboard::setDimensions(const Vector2 newDimensions)
 {
-    this->dimensions = dimensions;
+    this->dimensions = newDimensions;
 }
 
-Vector2 Scoreboard::getDimensions()
+Vector2 Scoreboard::getDimensions() const
 {
     return dimensions;
 }
 
-void Scoreboard::setColor(Color color)
+void Scoreboard::setColor(const Color newColor)
 {
-    this->color = color;
+    this->color = newColor;
 }
 
-Color Scoreboard::getColor()
+Color Scoreboard::getColor() const
 {
     return color;
 }
 
-void Scoreboard::setScore(Vector2 score)
+void Scoreboard::setScore(const Vector2 newScore)
 {
-    this->score = score;
+    this->score = newScore;
 }
 
-Vector2 Scoreboard::getScore()
+Vector2 Scoreboard::getScore() const
 {
     return score;
 }
 
-void Scoreboard::iterateScore(Side side)
+void Scoreboard::iterateScore(const Side side)
 {
     switch (side) {
         case Side::RIGHT:
@@ -71,8 +71,12 @@ void Scoreboard::draw() const
     constexpr int fontSize = 40;
     constexpr float verticalOffset = static_cast<float>(fontSize) / 2.0f;
 
-    DrawText(TextFormat("%d", (int) score.x), position.x + 20, position.y + (dimensions.y / 2) - verticalOffset,
+    DrawText(TextFormat("%d", static_cast<int>(score.x)),
+             static_cast<int>(position.x + 20),
+             static_cast<int>(position.y + (dimensions.y / 2) - verticalOffset),
              fontSize, BLACK);
-    DrawText(TextFormat("%d", (int) score.y), position.x + dimensions.x - 60,
-             position.y + (dimensions.y / 2) - verticalOffset, fontSize, BLACK);
+    DrawText(TextFormat("%d", static_cast<int>(score.y)),
+             static_cast<int>(position.x + dimensions.x - 60),
+             static_cast<int>(position.y + (dimensions.y / 2) - verticalOffset),
+             fontSize, BLACK);
 }

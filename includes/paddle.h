@@ -2,7 +2,7 @@
 #define RAYLIBPONG_PADDLE_H
 #include "barrier.h"
 
-class Paddle : public Barrier
+class Paddle final : public Barrier
 {
 protected:
     Rectangle playArea;

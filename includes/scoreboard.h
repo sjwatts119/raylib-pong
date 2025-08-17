@@ -14,25 +14,25 @@ private:
 public:
     Scoreboard(Vector2 position, Vector2 dimensions, Color color = WHITE);
 
-    void setPosition(Vector2 position);
+    void setPosition(Vector2 newPosition);
 
-    Vector2 getPosition();
+    [[nodiscard]] Vector2 getPosition() const;
 
-    void setDimensions(Vector2 dimensions);
+    void setDimensions(Vector2 newDimensions);
 
-    Vector2 getDimensions();
+    [[nodiscard]] Vector2 getDimensions() const;
 
-    void setColor(Color color);
+    void setColor(Color newColor);
 
-    Color getColor();
+    [[nodiscard]] Color getColor() const;
 
-    void setScore(Vector2 score);
+    void setScore(Vector2 newScore);
 
-    Vector2 getScore();
+    [[nodiscard]] Vector2 getScore() const;
 
     void iterateScore(Side side);
 
-    Rectangle getScoreboardRectangle() const;
+    [[nodiscard]] Rectangle getScoreboardRectangle() const;
 
     void draw() const;
 };

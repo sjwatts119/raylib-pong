@@ -1,48 +1,48 @@
 #include "barrier.h"
 
-Barrier::Barrier(Vector2 dimensions, Vector2 position, Color color)
+Barrier::Barrier(const Vector2 dimensions, const Vector2 position, const Color color)
     : dimensions(dimensions),
       position(position),
       color(color)
 {
 }
 
-void Barrier::setDimensions(Vector2 dimensions)
+void Barrier::setDimensions(const Vector2 newDimensions)
 {
-    this->dimensions = dimensions;
+    this->dimensions = newDimensions;
 }
 
-Vector2 Barrier::getDimensions()
+Vector2 Barrier::getDimensions() const
 {
     return dimensions;
 }
 
-void Barrier::setPosition(Vector2 position)
+void Barrier::setPosition(const Vector2 newPosition)
 {
-    this->position = position;
+    this->position = newPosition;
 }
 
-Vector2 Barrier::getPosition()
+Vector2 Barrier::getPosition() const
 {
     return position;
 }
 
-void Barrier::setColor(Color color)
+void Barrier::setColor(const Color newColor)
 {
-    this->color = color;
+    this->color = newColor;
 }
 
-Color Barrier::getColor()
+Color Barrier::getColor() const
 {
     return color;
 }
 
-Rectangle Barrier::getRectangle()
+Rectangle Barrier::getRectangle() const
 {
     return Rectangle({position.x, position.y, dimensions.x, dimensions.y});
 }
 
 void Barrier::draw()
 {
-    DrawRectangleRec(Barrier::getRectangle(), Barrier::getColor());
+    DrawRectangleRec(getRectangle(), getColor());
 }

@@ -6,42 +6,42 @@
 #include "raylib.h"
 #include "side.h"
 
-Board::Board(Vector2 dimensions, Vector2 position, Color color)
+Board::Board(const Vector2 dimensions, const Vector2 position, const Color color)
     : dimensions(dimensions),
       position(position),
-      color(color)
+      color(color),
+      scoreboard(createInitialScoreboard()),
+      ball(createInitialBall())
 {
     initBarriers();
-    initBall();
-    initScoreboard();
 }
 
-void Board::setDimensions(Vector2 dimensions)
+void Board::setDimensions(const Vector2 newDimensions)
 {
-    this->dimensions = dimensions;
+    this->dimensions = newDimensions;
 }
 
-Vector2 Board::getDimensions()
+Vector2 Board::getDimensions() const
 {
     return dimensions;
 }
 
-void Board::setPosition(Vector2 position)
+void Board::setPosition(const Vector2 newPosition)
 {
-    this->position = position;
+    this->position = newPosition;
 }
 
-Vector2 Board::getPosition()
+Vector2 Board::getPosition() const
 {
     return position;
 }
 
-void Board::setColor(Color color)
+void Board::setColor(const Color newColor)
 {
-    this->color = color;
+    this->color = newColor;
 }
 
-Color Board::getColor()
+Color Board::getColor() const
 {
     return color;
 }
@@ -62,58 +62,55 @@ Rectangle Board::getPlayAreaRectangle() const
     };
 }
 
-bool Board::hasWinningSide()
+bool Board::hasWinningSide() const
 {
     return getWinningSide().has_value();
 }
 
-std::optional<Side> Board::getWinningSide()
+std::optional<Side> Board::getWinningSide() const
 {
-    if (CheckCollisionCircleRec(ball->getPosition(), ball->getRadius(), getPlayAreaRectangle())) {
+    if (CheckCollisionCircleRec(ball.getPosition(), ball.getRadius(), getPlayAreaRectangle())) {
         return std::nullopt;
     }
 
-    return ball->getPosition().x < position.x ? Side::LEFT : Side::RIGHT;
+    return ball.getPosition().x < position.x ? Side::LEFT : Side::RIGHT;
 }
 
 void Board::applyBallDeflections()
 {
     for (const auto &barrier: barriers) {
-        std::optional<Side> collisionSide = ball->getCollisionSide(barrier->getRectangle());
+        std::optional<Side> collisionSide = ball.getCollisionSide(barrier->getRectangle());
 
         if (!collisionSide.has_value()) {
             continue;
         }
 
-        // Deflect the ball
-        ball->deflect(collisionSide.value());
-
+        ball.deflect(collisionSide.value());
         pushBallOutOfCollision(barrier->getRectangle(), collisionSide.value());
     }
 }
 
-void Board::pushBallOutOfCollision(const Rectangle& rect, Side collisionSide)
+void Board::pushBallOutOfCollision(const Rectangle& rect, const Side collisionSide)
 {
-    Vector2 ballPos = ball->getPosition();
-    int radius = ball->getRadius();
-    int buffer = ball->getSpeed() + 1;
+    Vector2 ballPos = ball.getPosition();
+    const float radius = ball.getRadius();
 
     switch (collisionSide) {
         case Side::LEFT:
-            ballPos.x = rect.x - radius - buffer;
+            ballPos.x = rect.x - radius - 1;
             break;
         case Side::RIGHT:
-            ballPos.x = rect.x + rect.width + radius + buffer;
+            ballPos.x = rect.x + rect.width + radius + 1;
             break;
         case Side::TOP:
-            ballPos.y = rect.y - radius - buffer;
+            ballPos.y = rect.y - radius - 1;
             break;
         case Side::BOTTOM:
-            ballPos.y = rect.y + rect.height + radius + buffer;
+            ballPos.y = rect.y + rect.height + radius + 1;
             break;
     }
 
-    ball->setPosition(ballPos);
+    ball.setPosition(ballPos);
 }
 
 void Board::initBarriers()
@@ -146,22 +143,22 @@ void Board::initBarriers()
     ));
 }
 
-void Board::initBall()
+Ball Board::createInitialBall() const
 {
-    Rectangle gameRect = getGameRectangle();
-    Vector2 playAreaCenter = {
-        gameRect.x + (gameRect.width / 2),
-        gameRect.y + (gameRect.height / 2)
+    auto [x, y, width, height] = getGameRectangle();
+    const Vector2 playAreaCenter = {
+        x + (width / 2),
+        y + (height / 2)
     };
 
-    ball = Ball(playAreaCenter, WHITE, 10);
+    return Ball(playAreaCenter, WHITE, 10.0f);
 }
 
-void Board::initScoreboard()
+Scoreboard Board::createInitialScoreboard() const
 {
-    Rectangle gameRect = getGameRectangle();
+    const Rectangle gameRect = getGameRectangle();
 
-    scoreboard = Scoreboard(
+    return Scoreboard(
         Vector2{position.x, gameRect.y + gameRect.height},
         Vector2{dimensions.x, std::abs(gameRect.height - dimensions.y)}
     );
@@ -169,23 +166,22 @@ void Board::initScoreboard()
 
 void Board::reset()
 {
-    initBall();
+    ball = createInitialBall();
 }
 
 void Board::update()
 {
-    ball->update();
+    ball.update();
 
     applyBallDeflections();
 
     if (const std::optional<Side> winningSide = getWinningSide()) {
-        scoreboard->iterateScore(winningSide.value());
-
+        scoreboard.iterateScore(winningSide.value());
         reset();
     }
 }
 
-void Board::draw()
+void Board::draw() const
 {
     DrawRectangleRec(getGameRectangle(), getColor());
 
@@ -193,7 +189,7 @@ void Board::draw()
         barrier->draw();
     }
 
-    ball->draw();
+    ball.draw();
 
-    scoreboard->draw();
+    scoreboard.draw();
 }

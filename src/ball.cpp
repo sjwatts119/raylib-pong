@@ -1,7 +1,7 @@
 #include "ball.h"
 #include "side.h"
 
-Ball::Ball(Vector2 position, Color color, int radius)
+Ball::Ball(const Vector2 position, const Color color, const float radius)
     : position(position), color(color), radius(radius)
 {
     // Set a random initial movement direction
@@ -9,58 +9,58 @@ Ball::Ball(Vector2 position, Color color, int radius)
     movement.y = GetRandomValue(0, 1) == 0 ? -1 : 1;
 }
 
-void Ball::setPosition(Vector2 position)
+void Ball::setPosition(const Vector2 newPosition)
 {
-    this->position = position;
+    this->position = newPosition;
 }
 
-Vector2 Ball::getPosition()
+Vector2 Ball::getPosition() const
 {
     return position;
 }
 
-void Ball::setMovement(Vector2 movement)
+void Ball::setMovement(const Vector2 newMovement)
 {
-    this->movement = movement;
+    this->movement = newMovement;
 }
 
-Vector2 Ball::getMovement()
+Vector2 Ball::getMovement() const
 {
     return movement;
 }
 
-void Ball::setColor(Color color)
+void Ball::setColor(const Color newColor)
 {
-    this->color = color;
+    this->color = newColor;
 }
 
-Color Ball::getColor()
+Color Ball::getColor() const
 {
     return color;
 }
 
-void Ball::setRadius(int radius)
+void Ball::setRadius(const float newRadius)
 {
-    this->radius = radius;
+    this->radius = newRadius;
 }
 
-int Ball::getRadius()
+float Ball::getRadius() const
 {
     return radius;
 }
 
-void Ball::setSpeed(int speed)
+void Ball::setSpeed(const float newSpeed)
 {
-    this->speed = speed;
+    this->speed = newSpeed;
 }
 
-int Ball::getSpeed()
+float Ball::getSpeed() const
 {
     return speed;
 }
 
 // Check if the ball collides with a rectangle and return the side of collision if it does.
-std::optional<Side> Ball::getCollisionSide(const Rectangle &rectangle)
+std::optional<Side> Ball::getCollisionSide(const Rectangle &rectangle) const
 {
     if (!CheckCollisionCircleRec(position, radius, rectangle)) {
         return std::nullopt;
@@ -77,9 +77,8 @@ Side Ball::getClosestSideToCollision(const Rectangle &rectangle) const
     float distanceToTop = position.y - rectangle.y;
     float distanceToBottom = (rectangle.y + rectangle.height) - position.y;
 
-    float minDistance = std::min({distanceToLeft, distanceToRight, distanceToTop, distanceToBottom});
-
-    if (minDistance == distanceToLeft) {
+    if (const float minDistance = std::min({distanceToLeft, distanceToRight, distanceToTop, distanceToBottom});
+        minDistance == distanceToLeft) {
         return Side::LEFT;
     } else if (minDistance == distanceToRight) {
         return Side::RIGHT;
@@ -94,14 +93,10 @@ void Ball::deflect(const Side side)
 {
     switch (side) {
         case Side::RIGHT:
-            movement.x = -movement.x;
-            break;
         case Side::LEFT:
             movement.x = -movement.x;
             break;
         case Side::TOP:
-            movement.y = -movement.y;
-            break;
         case Side::BOTTOM:
             movement.y = -movement.y;
             break;
@@ -119,7 +114,7 @@ void Ball::update()
     move();
 }
 
-void Ball::draw()
+void Ball::draw() const
 {
     DrawCircleV(position, radius, color);
 }

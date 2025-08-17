@@ -9,36 +9,36 @@ class Ball
 private:
     Vector2 position;
     Color color;
-    int radius;
-    int speed = 5;
+    float radius;
+    float speed = 5.0f;
     Vector2 movement = {0, 0};
 
 public:
-    explicit Ball(Vector2 position, Color color, int radius);
+    explicit Ball(Vector2 position, Color color, float radius);
 
-    void setPosition(Vector2 position);
+    void setPosition(Vector2 newPosition);
 
-    Vector2 getPosition();
+    [[nodiscard]] Vector2 getPosition() const;
 
-    void setMovement(Vector2 velocity);
+    void setMovement(Vector2 newMovement);
 
-    Vector2 getMovement();
+    [[nodiscard]] Vector2 getMovement() const;
 
-    void setColor(Color color);
+    void setColor(Color newColor);
 
-    Color getColor();
+    [[nodiscard]] Color getColor() const;
 
-    void setRadius(int radius);
+    void setRadius(float newRadius);
 
-    int getRadius();
+    [[nodiscard]] float getRadius() const;
 
-    void setSpeed(int speed);
+    void setSpeed(float newSpeed);
 
-    int getSpeed();
+    [[nodiscard]] float getSpeed() const;
 
-    std::optional<Side> getCollisionSide(const Rectangle &rectangle);
+    [[nodiscard]] std::optional<Side> getCollisionSide(const Rectangle &rectangle) const;
 
-    Side getClosestSideToCollision(const Rectangle &rectangle) const;
+    [[nodiscard]] Side getClosestSideToCollision(const Rectangle &rectangle) const;
 
     void deflect(Side side);
 
@@ -46,7 +46,7 @@ public:
 
     void update();
 
-    void draw();
+    void draw() const;
 };
 
 #endif //RAYLIBPONG_BALL_H

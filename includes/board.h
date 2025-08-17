@@ -19,48 +19,49 @@ private:
     float paddleInset = 20.0f;
     float paddleHeight = 100.0f;
 
-    std::optional<Scoreboard> scoreboard;
-    std::optional<Ball> ball;
+    Scoreboard scoreboard;
+    Ball ball;
     std::vector<std::unique_ptr<Barrier> > barriers;
 
 public:
     explicit Board(Vector2 dimensions, Vector2 position, Color color = WHITE);
 
-    void setDimensions(Vector2 dimensions);
+    void setDimensions(Vector2 newDimensions);
 
-    Vector2 getDimensions();
+    [[nodiscard]] Vector2 getDimensions() const;
 
-    void setPosition(Vector2 position);
+    void setPosition(Vector2 newPosition);
 
-    Vector2 getPosition();
+    [[nodiscard]] Vector2 getPosition() const;
 
-    void setColor(Color color);
+    void setColor(Color newColor);
 
-    Color getColor();
+    [[nodiscard]] Color getColor() const;
 
-    Rectangle getGameRectangle() const;
+    [[nodiscard]] Rectangle getGameRectangle() const;
 
-    Rectangle getPlayAreaRectangle() const;
+    [[nodiscard]] Rectangle getPlayAreaRectangle() const;
 
-    bool hasWinningSide();
+    [[nodiscard]] bool hasWinningSide() const;
 
-    std::optional<Side> getWinningSide();
+    [[nodiscard]] std::optional<Side> getWinningSide() const;
 
     void initBarriers();
-
-    void initBall();
-
-    void initScoreboard();
 
     void reset();
 
     void applyBallDeflections();
 
-    void pushBallOutOfCollision(const Rectangle& rect, Side collisionSide);
-
     void update();
 
-    void draw();
+    void draw() const;
+
+private:
+    [[nodiscard]] Ball createInitialBall() const;
+
+    [[nodiscard]] Scoreboard createInitialScoreboard() const;
+
+    void pushBallOutOfCollision(const Rectangle& rect, Side collisionSide);
 };
 
 #endif //RAYLIBTEMPLATE_BOARD_H
