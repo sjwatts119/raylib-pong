@@ -2,10 +2,10 @@
 #define RAYLIBPONG_SIDE_H
 
 enum class Side {
-    Right,
-    Left,
-    Top,
-    Bottom
+    RIGHT,
+    LEFT,
+    TOP,
+    BOTTOM,
 };
 
 #endif //RAYLIBPONG_SIDE_H

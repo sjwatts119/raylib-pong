@@ -2,6 +2,7 @@
 #define RAYLIBPONG_BALL_H
 #include "raylib.h"
 #include "side.h"
+#include <optional>
 
 class Ball
 {
@@ -29,6 +30,10 @@ public:
     void setRadius(int radius);
 
     int getRadius();
+
+    std::optional<Side> getCollisionSide(const Rectangle &rectangle);
+
+    Side getClosestSideToCollision(const Rectangle &rectangle);
 
     void deflect(Side side);
 

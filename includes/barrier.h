@@ -1,23 +1,17 @@
-#ifndef RAYLIBTEMPLATE_BOARD_H
-#define RAYLIBTEMPLATE_BOARD_H
-#include <vector>
+#ifndef RAYLIBPONG_BARRIER_H
+#define RAYLIBPONG_BARRIER_H
 
-#include "ball.h"
-#include "barrier.h"
 #include "raylib.h"
 
-class Board
+class Barrier
 {
 private:
     Vector2 dimensions;
     Vector2 position;
     Color color = WHITE;
 
-    Ball ball;
-    std::vector<Barrier> barriers;
-
 public:
-    explicit Board(Vector2 dimensions, Vector2 position, Color color = WHITE);
+    explicit Barrier(Vector2 dimensions, Vector2 position, Color color = SKYBLUE);
 
     void setDimensions(Vector2 dimensions);
 
@@ -36,4 +30,5 @@ public:
     void draw();
 };
 
-#endif //RAYLIBTEMPLATE_BOARD_H
+
+#endif //RAYLIBPONG_BARRIER_H
