@@ -4,6 +4,7 @@
 
 #include "ball.h"
 #include "barrier.h"
+#include "paddle.h"
 #include "raylib.h"
 #include "scoreboard.h"
 
@@ -21,7 +22,8 @@ private:
 
     Scoreboard scoreboard;
     Ball ball;
-    std::vector<std::unique_ptr<Barrier> > barriers;
+    std::vector<Barrier> barriers;
+    std::vector<Paddle> paddles;
 
 public:
     explicit Board(Vector2 dimensions, Vector2 position, Color color = WHITE);
@@ -46,9 +48,13 @@ public:
 
     [[nodiscard]] std::optional<Side> getWinningSide() const;
 
-    void initBarriers();
+    [[nodiscard]] std::vector<std::unique_ptr<Barrier>> getColliders() const;
+
+    void initColliders();
 
     void reset();
+
+    void applyPaddleMovements();
 
     void applyBallDeflections();
 

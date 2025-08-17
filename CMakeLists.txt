@@ -33,7 +33,8 @@ add_executable(${PROJECT_NAME} ${SOURCES}
         includes/paddle.h
         src/paddle.cpp
         src/scoreboard.cpp
-        src/scoreboard.h)
+        includes/scoreboard.h
+        includes/controlMode.h)
 target_link_libraries(${PROJECT_NAME} raylib)
 
 if (APPLE AND NOT CMAKE_SYSTEM STRLESS "Darwin-18.0.0")

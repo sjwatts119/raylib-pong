@@ -1,24 +1,36 @@
 #ifndef RAYLIBPONG_PADDLE_H
 #define RAYLIBPONG_PADDLE_H
+#include <optional>
+
+#include "ball.h"
 #include "barrier.h"
+#include "controlMode.h"
+#include "direction.h"
+
 
 class Paddle final : public Barrier
 {
 protected:
+    float speed = 10.0f;
     Rectangle playArea;
+    ControlMode controlMode;
 
 public:
-    Paddle(Vector2 dimensions, Vector2 position, Rectangle playArea, Color color = RED);
+    Paddle(Vector2 dimensions, Vector2 position, Rectangle playArea, ControlMode controlMode, Color color = RED);
 
-    void draw() override;
+    [[nodiscard]] ControlMode getControlMode() const;
 
-    void update();
+    void setControlMode(ControlMode newControlMode);
 
-    void applyMovement();
+    [[nodiscard]] std::optional<Direction> getMovementIntent(const Ball &ball) const;
+
+    void applyMovement(const Ball &ball);
 
     void moveUp();
 
     void moveDown();
+
+    void draw() override;
 };
 
 #endif //RAYLIBPONG_PADDLE_H

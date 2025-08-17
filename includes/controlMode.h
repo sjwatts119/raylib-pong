@@ -1,0 +1,10 @@
+#ifndef RAYLIBPONG_CONTROLMODE_H
+#define RAYLIBPONG_CONTROLMODE_H
+
+enum class ControlMode
+{
+    ARROW_KEYS,
+    COMPUTER,
+};
+
+#endif //RAYLIBPONG_CONTROLMODE_H

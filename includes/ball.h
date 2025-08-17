@@ -10,7 +10,7 @@ private:
     Vector2 position;
     Color color;
     float radius;
-    float speed = 5.0f;
+    float speed = 10.0f;
     Vector2 movement = {0, 0};
 
 public:

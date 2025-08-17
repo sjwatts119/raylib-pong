@@ -13,7 +13,7 @@ Board::Board(const Vector2 dimensions, const Vector2 position, const Color color
       scoreboard(createInitialScoreboard()),
       ball(createInitialBall())
 {
-    initBarriers();
+    initColliders();
 }
 
 void Board::setDimensions(const Vector2 newDimensions)
@@ -62,6 +62,21 @@ Rectangle Board::getPlayAreaRectangle() const
     };
 }
 
+std::vector<std::unique_ptr<Barrier>> Board::getColliders() const
+{
+    std::vector<std::unique_ptr<Barrier>> colliders;
+
+    for (const auto &barrier: barriers) {
+        colliders.push_back(std::make_unique<Barrier>(barrier));
+    }
+
+    for (const auto &paddle: paddles) {
+        colliders.push_back(std::make_unique<Barrier>(paddle));
+    }
+
+    return colliders;
+}
+
 bool Board::hasWinningSide() const
 {
     return getWinningSide().has_value();
@@ -76,17 +91,25 @@ std::optional<Side> Board::getWinningSide() const
     return ball.getPosition().x < position.x ? Side::LEFT : Side::RIGHT;
 }
 
+void Board::applyPaddleMovements()
+{
+    for (auto &paddle: paddles) {
+        paddle.applyMovement(ball);
+    }
+}
+
 void Board::applyBallDeflections()
 {
-    for (const auto &barrier: barriers) {
-        std::optional<Side> collisionSide = ball.getCollisionSide(barrier->getRectangle());
+    for (const auto &collider: getColliders()) {
+        std::optional<Side> collisionSide = ball.getCollisionSide(collider->getRectangle());
 
         if (!collisionSide.has_value()) {
             continue;
         }
 
         ball.deflect(collisionSide.value());
-        pushBallOutOfCollision(barrier->getRectangle(), collisionSide.value());
+
+        pushBallOutOfCollision(collider->getRectangle(), collisionSide.value());
     }
 }
 
@@ -94,53 +117,59 @@ void Board::pushBallOutOfCollision(const Rectangle& rect, const Side collisionSi
 {
     Vector2 ballPos = ball.getPosition();
     const float radius = ball.getRadius();
+    constexpr float buffer = 1.0f;
 
     switch (collisionSide) {
         case Side::LEFT:
-            ballPos.x = rect.x - radius - 1;
+            ballPos.x = rect.x - radius - buffer;
             break;
         case Side::RIGHT:
-            ballPos.x = rect.x + rect.width + radius + 1;
+            ballPos.x = rect.x + rect.width + radius + buffer;
             break;
         case Side::TOP:
-            ballPos.y = rect.y - radius - 1;
+            ballPos.y = rect.y - radius - buffer;
             break;
         case Side::BOTTOM:
-            ballPos.y = rect.y + rect.height + radius + 1;
+            ballPos.y = rect.y + rect.height + radius + buffer;
             break;
     }
 
     ball.setPosition(ballPos);
 }
 
-void Board::initBarriers()
+void Board::initColliders()
 {
-    Rectangle gameRect = getGameRectangle();
+    barriers.clear();
+    paddles.clear();
+
+    auto [x, y, width, height] = getGameRectangle();
 
     // Add top and bottom barriers
-    barriers.push_back(std::make_unique<Barrier>(
-        Vector2{gameRect.width, barrierWidth},
-        Vector2{gameRect.x, gameRect.y}
-    ));
-    barriers.push_back(std::make_unique<Barrier>(
-        Vector2{gameRect.width, barrierWidth},
-        Vector2{gameRect.x, gameRect.y + gameRect.height - barrierWidth}
-    ));
+    barriers.emplace_back(
+        Vector2{width, barrierWidth},
+        Vector2{x, y}
+    );
+    barriers.emplace_back(
+        Vector2{width, barrierWidth},
+        Vector2{x, y + height - barrierWidth}
+    );
 
     // Add left and right paddles
-    barriers.push_back(std::make_unique<Paddle>(
+    paddles.emplace_back(
         Vector2{barrierWidth, paddleHeight},
-        Vector2{gameRect.x + paddleInset, gameRect.y + (gameRect.height / 2) - (paddleHeight / 2)},
-        getPlayAreaRectangle()
-    ));
-    barriers.push_back(std::make_unique<Paddle>(
+        Vector2{x + paddleInset, y + (height / 2) - (paddleHeight / 2)},
+        getPlayAreaRectangle(),
+        ControlMode::ARROW_KEYS
+    );
+    paddles.emplace_back(
         Vector2{barrierWidth, paddleHeight},
         Vector2{
-            gameRect.x + gameRect.width - paddleInset - barrierWidth,
-            gameRect.y + (gameRect.height / 2) - (paddleHeight / 2)
+            x + width - paddleInset - barrierWidth,
+            y + (height / 2) - (paddleHeight / 2)
         },
-        getPlayAreaRectangle()
-    ));
+        getPlayAreaRectangle(),
+        ControlMode::COMPUTER
+    );
 }
 
 Ball Board::createInitialBall() const
@@ -171,6 +200,8 @@ void Board::reset()
 
 void Board::update()
 {
+    applyPaddleMovements();
+
     ball.update();
 
     applyBallDeflections();
@@ -185,8 +216,8 @@ void Board::draw() const
 {
     DrawRectangleRec(getGameRectangle(), getColor());
 
-    for (const auto &barrier: barriers) {
-        barrier->draw();
+    for (const auto &collider: getColliders()) {
+        collider->draw();
     }
 
     ball.draw();
