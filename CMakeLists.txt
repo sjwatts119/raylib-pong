@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(RaylibPong})
+project(RaylibPong)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -18,11 +18,16 @@ CPMAddPackage(
         "BUILD_GAMES OFF"
 )
 
-include_directories(include)
+include_directories(includes)
 
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES}
+        includes/board.h
+        src/board.cpp
+        src/ball.cpp
+        includes/ball.h
+        includes/side.h)
 target_link_libraries(${PROJECT_NAME} raylib)
 
 if (APPLE AND NOT CMAKE_SYSTEM STRLESS "Darwin-18.0.0")
