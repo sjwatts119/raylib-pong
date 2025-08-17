@@ -9,7 +9,7 @@ int main()
     InitWindow(screenWidth, screenHeight, "Raylib Pong");
     SetTargetFPS(60);
 
-    Vector2 boardDimensions{screenWidth / 2, screenHeight / 2};
+    Vector2 boardDimensions{1000, 600};
     Vector2 boardPosition{(screenWidth - boardDimensions.x) / 2, (screenHeight - boardDimensions.y) / 2};
     Board Board(boardDimensions, boardPosition, PINK);
 

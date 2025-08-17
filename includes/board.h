@@ -13,11 +13,18 @@ private:
     Vector2 position;
     Color color = WHITE;
 
-    Ball ball;
+    float barrierWidth = 10.0f;
+    float paddleInset = 20.0f;
+
+    std::optional<Ball> ball;
     std::vector<std::unique_ptr<Barrier>> barriers;
 
 public:
     explicit Board(Vector2 dimensions, Vector2 position, Color color = WHITE);
+
+    void initBarriers();
+
+    void initBall();
 
     void setDimensions(Vector2 dimensions);
 
@@ -32,6 +39,8 @@ public:
     Color getColor();
 
     Rectangle getRectangle();
+
+    Rectangle getPlayAreaRectangle() const;
 
     void applyBallDeflections();
 

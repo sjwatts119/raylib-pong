@@ -4,9 +4,11 @@
 
 class Paddle : public Barrier
 {
+protected:
+    Rectangle playArea;
+
 public:
-    // Constructor that forwards to parent
-    Paddle(Vector2 dimensions, Vector2 position, Color color = RED);
+    Paddle(Vector2 dimensions, Vector2 position, Rectangle playArea, Color color = RED);
 
     void draw() override;
 
@@ -16,6 +18,7 @@ public:
 
     // Add paddle-specific methods
     void moveUp();
+
     void moveDown();
 };
 
