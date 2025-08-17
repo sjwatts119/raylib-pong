@@ -13,16 +13,7 @@ Board::Board(Vector2 dimensions, Vector2 position, Color color)
 {
     initBarriers();
     initBall();
-}
-
-Rectangle Board::getPlayAreaRectangle() const
-{
-    return Rectangle{
-        position.x,
-        position.y + barrierWidth,
-        dimensions.x,
-        dimensions.y - (2 * barrierWidth)
-    };
+    initScoreboard();
 }
 
 void Board::setDimensions(Vector2 dimensions)
@@ -55,19 +46,20 @@ Color Board::getColor()
     return color;
 }
 
-void Board::setScore(Vector2 score)
+Rectangle Board::getGameRectangle() const
 {
-    this->score = score;
+    return Rectangle{position.x, position.y, dimensions.x, dimensions.y - 100};
 }
 
-Vector2 Board::getScore()
+Rectangle Board::getPlayAreaRectangle() const
 {
-    return score;
-}
-
-Rectangle Board::getRectangle()
-{
-    return Rectangle{position.x, position.y, dimensions.x, dimensions.y};
+    auto [x, y, width, height] = getGameRectangle();
+    return Rectangle{
+        x,
+        y + barrierWidth,
+        width,
+        height - (2 * barrierWidth)
+    };
 }
 
 bool Board::hasWinningSide()
@@ -99,26 +91,29 @@ void Board::applyBallDeflections()
 
 void Board::initBarriers()
 {
-    // Add top and bottom barriers
+    Rectangle gameRect = getGameRectangle();
+
+    // Add top and bottom barriers (using game rectangle dimensions)
     barriers.push_back(std::make_unique<Barrier>(
-        Vector2{dimensions.x, barrierWidth},
-        Vector2{position.x, position.y}
+        Vector2{gameRect.width, barrierWidth},
+        Vector2{gameRect.x, gameRect.y}
     ));
     barriers.push_back(std::make_unique<Barrier>(
-        Vector2{dimensions.x, barrierWidth},
-        Vector2{position.x, position.y + dimensions.y - barrierWidth}
+        Vector2{gameRect.width, barrierWidth},
+        Vector2{gameRect.x, gameRect.y + gameRect.height - barrierWidth}
     ));
 
-    // Add left and right paddles
+    // Add left and right paddles (positioned within game rectangle)
     barriers.push_back(std::make_unique<Paddle>(
         Vector2{barrierWidth, paddleHeight},
-        Vector2{position.x + paddleInset, position.y + (dimensions.y / 2) - (paddleHeight / 2)},
+        Vector2{gameRect.x + paddleInset, gameRect.y + (gameRect.height / 2) - (paddleHeight / 2)},
         getPlayAreaRectangle()
     ));
     barriers.push_back(std::make_unique<Paddle>(
         Vector2{barrierWidth, paddleHeight},
         Vector2{
-            position.x + dimensions.x - paddleInset - barrierWidth, position.y + (dimensions.y / 2) - (paddleHeight / 2)
+            gameRect.x + gameRect.width - paddleInset - barrierWidth,
+            gameRect.y + (gameRect.height / 2) - (paddleHeight / 2)
         },
         getPlayAreaRectangle()
     ));
@@ -126,24 +121,23 @@ void Board::initBarriers()
 
 void Board::initBall()
 {
+    Rectangle gameRect = getGameRectangle();
     Vector2 playAreaCenter = {
-        position.x + (dimensions.x / 2),
-        position.y + (dimensions.y / 2)
+        gameRect.x + (gameRect.width / 2),
+        gameRect.y + (gameRect.height / 2)
     };
 
     ball = Ball(playAreaCenter, WHITE, 10);
 }
 
-void Board::iterateScore(Side side)
+void Board::initScoreboard()
 {
-    switch (side) {
-        case Side::RIGHT:
-            score.x += 1;
-            break;
-        default:
-            score.y += 1;
-            break;
-    }
+    Rectangle gameRect = getGameRectangle();
+
+    scoreboard = Scoreboard(
+        Vector2{position.x,gameRect.y + gameRect.height},
+        Vector2{dimensions.x,std::abs(gameRect.height - dimensions.y)}
+    );
 }
 
 void Board::reset()
@@ -153,7 +147,7 @@ void Board::reset()
 
 void Board::draw()
 {
-    DrawRectangleRec(getRectangle(), getColor());
+    DrawRectangleRec(getGameRectangle(), getColor());
 
     for (const auto &barrier: barriers) {
         barrier->draw();
@@ -163,12 +157,13 @@ void Board::draw()
 
     applyBallDeflections();
 
-    std::optional<Side> winningSide = getWinningSide();
-    if (winningSide.has_value()) {
-        iterateScore(winningSide.value());
+    ball->draw();
+
+    if (const std::optional<Side> winningSide = getWinningSide()) {
+        scoreboard->iterateScore(winningSide.value());
 
         reset();
     }
 
-    ball->draw();
+    scoreboard->draw();
 }

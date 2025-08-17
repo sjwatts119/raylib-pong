@@ -5,6 +5,7 @@
 #include "ball.h"
 #include "barrier.h"
 #include "raylib.h"
+#include "scoreboard.h"
 
 class Board
 {
@@ -13,13 +14,12 @@ private:
     Vector2 position;
     Color color = WHITE;
 
-    Vector2 score = {0, 0};
-
     float barrierWidth = 10.0f;
 
     float paddleInset = 20.0f;
     float paddleHeight = 100.0f;
 
+    std::optional<Scoreboard> scoreboard;
     std::optional<Ball> ball;
     std::vector<std::unique_ptr<Barrier>> barriers;
 
@@ -42,7 +42,9 @@ public:
 
     Vector2 getScore();
 
-    Rectangle getRectangle();
+    Rectangle getGameRectangle() const;
+
+    Rectangle getScoreboardRectangle() const;
 
     Rectangle getPlayAreaRectangle() const;
 
@@ -54,7 +56,11 @@ public:
 
     void initBall();
 
+    void initScoreboard();
+
     void iterateScore(Side side);
+
+    void drawScoreboard() const;
 
     void reset();
 

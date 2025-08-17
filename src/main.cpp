@@ -9,7 +9,7 @@ int main()
     InitWindow(screenWidth, screenHeight, "Raylib Pong");
     SetTargetFPS(60);
 
-    Vector2 boardDimensions{1000, 600};
+    Vector2 boardDimensions{screenWidth, screenHeight};
     Vector2 boardPosition{(screenWidth - boardDimensions.x) / 2, (screenHeight - boardDimensions.y) / 2};
     Board Board(boardDimensions, boardPosition, PINK);
 
@@ -19,12 +19,6 @@ int main()
         ClearBackground(BLACK);
 
         Board.draw();
-
-        // Draw text of the score
-        Vector2 score = Board.getScore();
-        DrawText(TextFormat("Score: %d - %d", (int)score.x, (int)score.y),
-                 screenWidth / 2 - MeasureText(TextFormat("Score: %d - %d", (int)score.x, (int)score.y), 20) / 2,
-                 20, 20, WHITE);
 
         EndDrawing();
     }
