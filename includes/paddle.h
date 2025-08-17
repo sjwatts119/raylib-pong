@@ -16,7 +16,6 @@ public:
 
     void applyMovement();
 
-    // Add paddle-specific methods
     void moveUp();
 
     void moveDown();
