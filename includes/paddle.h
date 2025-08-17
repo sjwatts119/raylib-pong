@@ -7,7 +7,6 @@
 #include "controlMode.h"
 #include "direction.h"
 
-
 class Paddle final : public Barrier
 {
 protected:
@@ -24,7 +23,7 @@ public:
 
     [[nodiscard]] std::optional<Direction> getMovementIntent(const Ball &ball) const;
 
-    void applyMovement(const Ball &ball);
+    void applyMovement(Direction direction);
 
     void moveUp();
 

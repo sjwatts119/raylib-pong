@@ -63,15 +63,9 @@ std::optional<Direction> Paddle::getMovementIntent(const Ball &ball) const
     return std::nullopt;
 }
 
-void Paddle::applyMovement(const Ball &ball)
+void Paddle::applyMovement(const Direction direction)
 {
-    const std::optional<Direction> movementIntent = getMovementIntent(ball);
-
-    if (!movementIntent.has_value()) {
-        return;
-    }
-
-    switch (movementIntent.value()) {
+    switch (direction) {
         case(Direction::UP):
             moveUp();
             break;

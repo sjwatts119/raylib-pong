@@ -65,6 +65,7 @@ Rectangle Board::getPlayAreaRectangle() const
 std::vector<std::unique_ptr<Barrier>> Board::getColliders() const
 {
     std::vector<std::unique_ptr<Barrier>> colliders;
+    colliders.reserve(barriers.size());
 
     for (const auto &barrier: barriers) {
         colliders.push_back(std::make_unique<Barrier>(barrier));
@@ -94,7 +95,13 @@ std::optional<Side> Board::getWinningSide() const
 void Board::applyPaddleMovements()
 {
     for (auto &paddle: paddles) {
-        paddle.applyMovement(ball);
+        std::optional<Direction> direction = paddle.getMovementIntent(ball);
+
+        if (!direction.has_value()) {
+            continue;
+        }
+
+        paddle.applyMovement(direction.value());
     }
 }
 
@@ -156,13 +163,13 @@ void Board::initColliders()
 
     // Add left and right paddles
     paddles.emplace_back(
-        Vector2{barrierWidth, paddleHeight},
+        Vector2{paddleWidth, paddleHeight},
         Vector2{x + paddleInset, y + (height / 2) - (paddleHeight / 2)},
         getPlayAreaRectangle(),
         ControlMode::ARROW_KEYS
     );
     paddles.emplace_back(
-        Vector2{barrierWidth, paddleHeight},
+        Vector2{paddleWidth, paddleHeight},
         Vector2{
             x + width - paddleInset - barrierWidth,
             y + (height / 2) - (paddleHeight / 2)

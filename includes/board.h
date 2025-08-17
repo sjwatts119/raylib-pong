@@ -19,6 +19,7 @@ private:
 
     float paddleInset = 20.0f;
     float paddleHeight = 100.0f;
+    float paddleWidth = 20.0f;
 
     Scoreboard scoreboard;
     Ball ball;
