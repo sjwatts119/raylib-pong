@@ -70,13 +70,14 @@ void Scoreboard::draw() const
 
     constexpr int fontSize = 40;
     constexpr float verticalOffset = static_cast<float>(fontSize) / 2.0f;
+    constexpr float horizontalInset = 40.0f;
 
     DrawText(TextFormat("%d", static_cast<int>(score.x)),
-             static_cast<int>(position.x + 20),
+             static_cast<int>(position.x + horizontalInset),
              static_cast<int>(position.y + (dimensions.y / 2) - verticalOffset),
              fontSize, BLACK);
     DrawText(TextFormat("%d", static_cast<int>(score.y)),
-             static_cast<int>(position.x + dimensions.x - 60),
+             static_cast<int>(position.x + dimensions.x - horizontalInset - static_cast<float>(MeasureText(TextFormat("%d", static_cast<int>(score.y)), fontSize))),
              static_cast<int>(position.y + (dimensions.y / 2) - verticalOffset),
              fontSize, BLACK);
 }
