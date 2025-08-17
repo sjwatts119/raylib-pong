@@ -18,6 +18,8 @@ int main()
 
         ClearBackground(BLACK);
 
+        Board.update();
+
         Board.draw();
 
         EndDrawing();

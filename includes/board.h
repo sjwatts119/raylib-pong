@@ -56,6 +56,10 @@ public:
 
     void applyBallDeflections();
 
+    void pushBallOutOfCollision(const Rectangle& rect, Side collisionSide);
+
+    void update();
+
     void draw();
 };
 

@@ -78,22 +78,49 @@ std::optional<Side> Board::getWinningSide()
 
 void Board::applyBallDeflections()
 {
-    for (auto &barrier: barriers) {
-        std::optional<Side> collision = ball->getCollisionSide(barrier->getRectangle());
+    for (const auto &barrier: barriers) {
+        std::optional<Side> collisionSide = ball->getCollisionSide(barrier->getRectangle());
 
-        if (!collision.has_value()) {
+        if (!collisionSide.has_value()) {
             continue;
         }
 
-        ball->deflect(collision.value());
+        // Deflect the ball
+        ball->deflect(collisionSide.value());
+
+        pushBallOutOfCollision(barrier->getRectangle(), collisionSide.value());
     }
+}
+
+void Board::pushBallOutOfCollision(const Rectangle& rect, Side collisionSide)
+{
+    Vector2 ballPos = ball->getPosition();
+    int radius = ball->getRadius();
+    int buffer = ball->getSpeed() + 1;
+
+    switch (collisionSide) {
+        case Side::LEFT:
+            ballPos.x = rect.x - radius - buffer;
+            break;
+        case Side::RIGHT:
+            ballPos.x = rect.x + rect.width + radius + buffer;
+            break;
+        case Side::TOP:
+            ballPos.y = rect.y - radius - buffer;
+            break;
+        case Side::BOTTOM:
+            ballPos.y = rect.y + rect.height + radius + buffer;
+            break;
+    }
+
+    ball->setPosition(ballPos);
 }
 
 void Board::initBarriers()
 {
     Rectangle gameRect = getGameRectangle();
 
-    // Add top and bottom barriers (using game rectangle dimensions)
+    // Add top and bottom barriers
     barriers.push_back(std::make_unique<Barrier>(
         Vector2{gameRect.width, barrierWidth},
         Vector2{gameRect.x, gameRect.y}
@@ -103,7 +130,7 @@ void Board::initBarriers()
         Vector2{gameRect.x, gameRect.y + gameRect.height - barrierWidth}
     ));
 
-    // Add left and right paddles (positioned within game rectangle)
+    // Add left and right paddles
     barriers.push_back(std::make_unique<Paddle>(
         Vector2{barrierWidth, paddleHeight},
         Vector2{gameRect.x + paddleInset, gameRect.y + (gameRect.height / 2) - (paddleHeight / 2)},
@@ -145,6 +172,19 @@ void Board::reset()
     initBall();
 }
 
+void Board::update()
+{
+    ball->update();
+
+    applyBallDeflections();
+
+    if (const std::optional<Side> winningSide = getWinningSide()) {
+        scoreboard->iterateScore(winningSide.value());
+
+        reset();
+    }
+}
+
 void Board::draw()
 {
     DrawRectangleRec(getGameRectangle(), getColor());
@@ -153,17 +193,7 @@ void Board::draw()
         barrier->draw();
     }
 
-    ball->update();
-
-    applyBallDeflections();
-
     ball->draw();
-
-    if (const std::optional<Side> winningSide = getWinningSide()) {
-        scoreboard->iterateScore(winningSide.value());
-
-        reset();
-    }
 
     scoreboard->draw();
 }

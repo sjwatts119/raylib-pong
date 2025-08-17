@@ -6,7 +6,7 @@ Ball::Ball(Vector2 position, Color color, int radius)
 {
     // Set a random initial movement direction
     movement.x = GetRandomValue(0, 1) == 0 ? -1 : 1;
-    movement.y = GetRandomValue(1, 1) == 0 ? -1 : 1;
+    movement.y = GetRandomValue(0, 1) == 0 ? -1 : 1;
 }
 
 void Ball::setPosition(Vector2 position)
