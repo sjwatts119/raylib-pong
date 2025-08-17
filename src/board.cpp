@@ -55,6 +55,16 @@ Color Board::getColor()
     return color;
 }
 
+void Board::setScore(Vector2 score)
+{
+    this->score = score;
+}
+
+Vector2 Board::getScore()
+{
+    return score;
+}
+
 Rectangle Board::getRectangle()
 {
     return Rectangle{position.x, position.y, dimensions.x, dimensions.y};
@@ -124,6 +134,18 @@ void Board::initBall()
     ball = Ball(playAreaCenter, WHITE, 10);
 }
 
+void Board::iterateScore(Side side)
+{
+    switch (side) {
+        case Side::RIGHT:
+            score.x += 1;
+            break;
+        default:
+            score.y += 1;
+            break;
+    }
+}
+
 void Board::reset()
 {
     initBall();
@@ -143,6 +165,8 @@ void Board::draw()
 
     std::optional<Side> winningSide = getWinningSide();
     if (winningSide.has_value()) {
+        iterateScore(winningSide.value());
+
         reset();
     }
 

@@ -13,6 +13,8 @@ private:
     Vector2 position;
     Color color = WHITE;
 
+    Vector2 score = {0, 0};
+
     float barrierWidth = 10.0f;
 
     float paddleInset = 20.0f;
@@ -36,6 +38,10 @@ public:
 
     Color getColor();
 
+    void setScore(Vector2 score);
+
+    Vector2 getScore();
+
     Rectangle getRectangle();
 
     Rectangle getPlayAreaRectangle() const;
@@ -47,6 +53,8 @@ public:
     void initBarriers();
 
     void initBall();
+
+    void iterateScore(Side side);
 
     void reset();
 

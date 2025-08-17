@@ -20,6 +20,12 @@ int main()
 
         Board.draw();
 
+        // Draw text of the score
+        Vector2 score = Board.getScore();
+        DrawText(TextFormat("Score: %d - %d", (int)score.x, (int)score.y),
+                 screenWidth / 2 - MeasureText(TextFormat("Score: %d - %d", (int)score.x, (int)score.y), 20) / 2,
+                 20, 20, WHITE);
+
         EndDrawing();
     }
 
