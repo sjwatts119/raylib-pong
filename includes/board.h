@@ -21,7 +21,7 @@ private:
 
     std::optional<Scoreboard> scoreboard;
     std::optional<Ball> ball;
-    std::vector<std::unique_ptr<Barrier>> barriers;
+    std::vector<std::unique_ptr<Barrier> > barriers;
 
 public:
     explicit Board(Vector2 dimensions, Vector2 position, Color color = WHITE);
@@ -38,13 +38,7 @@ public:
 
     Color getColor();
 
-    void setScore(Vector2 score);
-
-    Vector2 getScore();
-
     Rectangle getGameRectangle() const;
-
-    Rectangle getScoreboardRectangle() const;
 
     Rectangle getPlayAreaRectangle() const;
 
@@ -57,10 +51,6 @@ public:
     void initBall();
 
     void initScoreboard();
-
-    void iterateScore(Side side);
-
-    void drawScoreboard() const;
 
     void reset();
 

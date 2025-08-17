@@ -71,6 +71,8 @@ void Scoreboard::draw() const
     constexpr int fontSize = 40;
     constexpr float verticalOffset = static_cast<float>(fontSize) / 2.0f;
 
-    DrawText(TextFormat("%d", (int) score.x), position.x + 20, position.y + (dimensions.y / 2) - verticalOffset, fontSize, BLACK);
-    DrawText(TextFormat("%d", (int) score.y), position.x + dimensions.x - 60, position.y + (dimensions.y / 2) - verticalOffset, fontSize, BLACK);
+    DrawText(TextFormat("%d", (int) score.x), position.x + 20, position.y + (dimensions.y / 2) - verticalOffset,
+             fontSize, BLACK);
+    DrawText(TextFormat("%d", (int) score.y), position.x + dimensions.x - 60,
+             position.y + (dimensions.y / 2) - verticalOffset, fontSize, BLACK);
 }

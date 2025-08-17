@@ -10,6 +10,7 @@ private:
     Vector2 dimensions;
     Color color;
     Vector2 score = {0, 0};
+
 public:
     Scoreboard(Vector2 position, Vector2 dimensions, Color color = WHITE);
 
@@ -34,8 +35,6 @@ public:
     Rectangle getScoreboardRectangle() const;
 
     void draw() const;
-
 };
-
 
 #endif //RAYLIBPONG_SCOREBOARD_H

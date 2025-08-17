@@ -2,7 +2,7 @@
 
 Paddle::Paddle(Vector2 dimensions, Vector2 position, Rectangle playArea, Color color)
     : Barrier(dimensions, position, color),
-    playArea(playArea)
+      playArea(playArea)
 {
 }
 

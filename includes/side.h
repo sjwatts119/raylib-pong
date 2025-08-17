@@ -1,7 +1,8 @@
 #ifndef RAYLIBPONG_SIDE_H
 #define RAYLIBPONG_SIDE_H
 
-enum class Side {
+enum class Side
+{
     RIGHT,
     LEFT,
     TOP,

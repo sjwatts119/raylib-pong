@@ -135,8 +135,8 @@ void Board::initScoreboard()
     Rectangle gameRect = getGameRectangle();
 
     scoreboard = Scoreboard(
-        Vector2{position.x,gameRect.y + gameRect.height},
-        Vector2{dimensions.x,std::abs(gameRect.height - dimensions.y)}
+        Vector2{position.x, gameRect.y + gameRect.height},
+        Vector2{dimensions.x, std::abs(gameRect.height - dimensions.y)}
     );
 }
 
