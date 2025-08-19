@@ -1,4 +1,6 @@
 #include "board.h"
+
+#include <cmath>
 #include <vector>
 #include "barrier.h"
 #include "ball.h"

@@ -1,5 +1,6 @@
 #ifndef RAYLIBTEMPLATE_BOARD_H
 #define RAYLIBTEMPLATE_BOARD_H
+#include <memory>
 #include <vector>
 
 #include "ball.h"

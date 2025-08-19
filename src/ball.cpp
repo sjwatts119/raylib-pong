@@ -1,4 +1,7 @@
 #include "ball.h"
+
+#include <algorithm>
+
 #include "side.h"
 
 Ball::Ball(const Vector2 position, const Color color, const float radius)
